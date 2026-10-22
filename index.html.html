@@ -1,380 +1,226 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Álbum & Desafios - Nathalia e Gabriel</title>
-    
-    <!-- Bibliotecas: Tailwind, FontAwesome, Supabase, JSZip e FileSaver -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        invite: { green: '#55604C', cream: '#F6F4F0', gold: '#9A947A', text: '#4A4A4A' }
-                    },
-                    fontFamily: {
-                        script: ['"Great Vibes"', 'cursive'],
-                        serif: ['"Cormorant Garamond"', 'serif']
-                    }
-                }
-            }
-        }
-    </script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
-    
-    <style>
-        body { background-color: #F6F4F0; color: #4A4A4A; font-family: 'Cormorant Garamond', serif; }
-        .tab-content { display: none; animation: fadeIn 0.4s ease-in-out; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .monogram { font-size: 2.5rem; line-height: 1; color: #F6F4F0; display: flex; justify-content: center; margin-bottom: 0.5rem; font-weight: 300; }
-        .separator-line { display: flex; align-items: center; text-align: center; color: #9A947A; text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.8rem; }
-        .separator-line::before, .separator-line::after { content: ''; flex: 1; border-bottom: 1px solid rgba(154, 148, 122, 0.4); }
-        .separator-line::before { margin-right: .75em; }
-        .separator-line::after { margin-left: .75em; }
-        .glass-nav { background: rgba(246, 244, 240, 0.95); backdrop-filter: blur(12px); border-top: 1px solid rgba(154, 148, 122, 0.3); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#55604C">
+<title>Álbum de Nathalia e Gabriel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Great+Vibes&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ol:#55604C;--ol2:#46503e;--cr:#F6F4F0;--wh:#FDFBF7;--go:#9A947A;--gt:#6F6951;--ink:#2F3329;--err:#9B2C2C;--ok:#3F6B3A;--ln:rgba(154,148,122,.4)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cr);color:var(--ink);font:16px/1.55 'Hanken Grotesk',system-ui,sans-serif;padding-bottom:env(safe-area-inset-bottom)}
+h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;margin:0}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--go);outline-offset:2px}
+.hero{background:var(--ol);color:var(--cr);text-align:center;padding:calc(2.5rem + env(safe-area-inset-top)) 1.5rem 3rem;border-radius:0 0 2rem 2rem}
+.mono{font-family:'Great Vibes',cursive;font-size:4.5rem;line-height:1;opacity:.9}
+.names{font-family:'Great Vibes',cursive;font-size:3.1rem;font-weight:400;line-height:1.15;margin:.25rem 0}
+.date{margin:0 0 1rem;opacity:.85;letter-spacing:.04em}
+.lead{max-width:30ch;margin:0 auto 1.75rem;font-size:1.08rem;opacity:.95}
+.cta{display:block;width:100%;max-width:340px;margin:0 auto;background:var(--cr);color:var(--ol);border:0;border-radius:999px;padding:1.05rem 1.5rem;font-weight:600;font-size:1.1rem;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.cta:active{transform:scale(.98)}
+main{max-width:560px;margin:0 auto;padding:2rem 1.25rem 3rem}
+h2{font-size:1.8rem;color:var(--ol);margin-bottom:.35rem}
+.sub{color:var(--gt);margin:0 0 1.25rem}
+.how{margin:0 0 2.5rem;padding:0;list-style:none;display:grid;gap:.6rem}
+.how li{background:var(--wh);border-left:3px solid var(--go);padding:.7rem 1rem;border-radius:0 .75rem .75rem 0}
+.ms{display:grid;gap:.65rem}
+.m{display:flex;align-items:center;gap:.9rem;width:100%;text-align:left;background:var(--wh);border:1px solid var(--ln);border-radius:1rem;padding:.8rem 1rem;cursor:pointer;min-height:64px}
+.m .ic{font-size:1.6rem;width:2.4rem;text-align:center}
+.m b{display:block;font-weight:600}
+.m span.d{display:block;color:var(--gt);font-size:.92rem}
+.m.done{border-color:var(--ok)}
+.m .ck{margin-left:auto;color:var(--ok);font-weight:600;font-size:.9rem;white-space:nowrap}
+.note{color:var(--gt);font-size:.95rem}
+dialog{border:0;padding:0;width:100%;max-width:560px;margin:auto auto 0;border-radius:1.5rem 1.5rem 0 0;background:var(--wh);color:var(--ink);max-height:94dvh;overflow:auto}
+dialog::backdrop{background:rgba(30,35,26,.55)}
+.sheet{padding:1.25rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom))}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}
+.x{background:none;border:0;font-size:1.8rem;line-height:1;padding:.25rem .6rem;cursor:pointer;color:var(--gt)}
+label{display:block;font-weight:600;margin:1rem 0 .3rem}
+input[type=text],select{width:100%;padding:.85rem 1rem;border:1px solid var(--go);border-radius:.75rem;background:#fff;font-size:1rem}
+.pick{display:flex;flex-direction:column;align-items:center;gap:.2rem;border:2px dashed var(--go);border-radius:1rem;padding:1.25rem;background:var(--cr);cursor:pointer;text-align:center;margin-top:1rem}
+.pick b{color:var(--ol);font-size:1.1rem}
+.pick small{color:var(--gt)}
+.list{display:grid;gap:.5rem;margin-top:1rem}
+.f{display:grid;grid-template-columns:56px 1fr auto;gap:.75rem;align-items:center;background:#fff;border:1px solid var(--ln);border-radius:.75rem;padding:.5rem}
+.f .th{width:56px;height:56px;border-radius:.5rem;object-fit:cover;background:var(--cr);display:grid;place-items:center;font-size:1.4rem}
+.f .n{font-size:.92rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.f .s{font-size:.85rem;color:var(--gt)}
+.f .s.e{color:var(--err);font-weight:500}.f .s.o{color:var(--ok);font-weight:500}
+.bar{height:5px;background:var(--cr);border-radius:3px;margin-top:.3rem;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--ol);transition:width .2s}
+.rm{background:none;border:0;color:var(--gt);font-size:1.4rem;padding:.4rem .6rem;cursor:pointer}
+.tot{margin:.75rem 0 0;color:var(--gt);font-size:.95rem}
+.send{margin-top:1rem;width:100%;background:var(--ol);color:var(--cr);border:0;border-radius:999px;padding:1rem;font-weight:600;font-size:1.05rem;cursor:pointer}
+.send:disabled{opacity:.55;cursor:not-allowed}
+.msg{margin-top:1rem;padding:.8rem 1rem;border-radius:.75rem;font-weight:500}
+.msg.e{background:#fbeaea;color:var(--err)}.msg.o{background:#e8f1e6;color:var(--ok)}
+.hide{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media (min-width:600px){dialog{margin:auto;border-radius:1.5rem}}
+</style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden pb-16">
+<body>
+<header class="hero">
+  <div class="mono" aria-hidden="true">N&amp;G</div>
+  <h1 class="names">Nathalia e Gabriel</h1>
+  <p class="date">28 de novembro de 2026</p>
+  <p class="lead">Ajude a guardar os melhores momentos da nossa festa.</p>
+  <button class="cta" id="open">Enviar fotos e vídeos</button>
+</header>
+<main>
+  <h2>Como participar</h2>
+  <ul class="how">
+    <li>Toque em <b>Enviar fotos e vídeos</b> e digite seu nome.</li>
+    <li>Escolha os arquivos da galeria ou tire na hora.</li>
+    <li>Toque em enviar. Não precisa de cadastro.</li>
+  </ul>
+  <h2>Missões da festa</h2>
+  <p class="sub">Toque em uma missão para enviar uma foto ou vídeo dela.</p>
+  <div class="ms" id="ms" aria-live="polite"><p class="note">Carregando missões…</p></div>
+</main>
 
-    <!-- Header -->
-    <header class="bg-invite-green text-invite-cream p-6 rounded-b-3xl relative z-10 shadow-md">
-        <div class="text-center flex flex-col items-center">
-            <div class="monogram tracking-widest">N<span class="ml-[-0.2em] mt-[0.3em]">G</span></div>
-            <div class="flex items-center justify-center gap-3 w-full max-w-[250px] mb-4">
-                <div class="h-px bg-invite-cream w-8 opacity-60"></div>
-                <p class="text-[0.7rem] uppercase tracking-[0.2em] text-invite-cream opacity-90">28 de Novembro de 2026</p>
-                <div class="h-px bg-invite-cream w-8 opacity-60"></div>
-            </div>
-            <h1 class="text-5xl font-script text-invite-cream mt-1 mb-2 font-normal">Nathalia e Gabriel</h1>
-            <p class="text-xs text-invite-cream opacity-70 tracking-widest mt-2 uppercase">Registre o nosso dia</p>
-        </div>
-    </header>
+<dialog id="dlg" aria-labelledby="dt">
+ <div class="sheet">
+  <div class="top"><h2 id="dt">Enviar para os noivos</h2><button class="x" id="close" aria-label="Fechar">×</button></div>
+  <label for="nm">Seu nome</label>
+  <input type="text" id="nm" maxlength="80" autocomplete="given-name" placeholder="Como os noivos vão te reconhecer">
+  <label for="ms2">Missão (opcional)</label>
+  <select id="ms2"><option value="">Sem missão, registro livre</option></select>
+  <label class="pick" for="fi"><b>Escolher fotos e vídeos</b><small>Fotos até 25 MB, vídeos até 50 MB</small></label>
+  <input type="file" id="fi" accept="image/*,video/*" multiple class="hide">
+  <div class="list" id="list"></div>
+  <p class="tot" id="tot"></p>
+  <div id="msg" role="status" class="hide"></div>
+  <button class="send" id="send" disabled>Enviar</button>
+ </div>
+</dialog>
 
-    <main class="flex-1 overflow-y-auto no-scrollbar relative">
-        
-        <!-- ABA: ENVIAR FOTO -->
-        <section id="tab-enviar" class="tab-content active p-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-invite-gold/20 p-6 relative overflow-hidden">
-                <i class="fas fa-user-tie absolute top-4 left-4 text-invite-green opacity-5 text-4xl"></i>
-                <i class="fas fa-person-dress absolute top-4 right-4 text-invite-green opacity-5 text-4xl"></i>
+<script>
+const API='https://yuuqhtggevxuhknqxusy.supabase.co',KEY='sb_publishable_8hdnGd_ZVhMY7cd7tQ-1Ow_WTO1Q_2m',EV='nathalia-gabriel';
+const IMG_MAX=25*1048576,VID_MAX=50*1048576,OKX=/^(jpe?g|png|webp|heic|heif|gif|mp4|mov|webm|3gp)$/i;
+const ICONS={camera:'📸','user-tie':'👔','clipboard-list':'📋',heart:'💞','champagne-glasses':'🥂','face-grin-tears':'🥹',music:'🕺',leaf:'🌿','cake-candles':'🍬',user:'👵'};
+const $=id=>document.getElementById(id);
+let files=[],busy=false,missions=[],uid=0;
+const doneSet=new Set(JSON.parse(localStorage.getItem('doneMissions')||'[]'));
+const fmt=b=>b>=1048576?(b/1048576).toFixed(1)+' MB':Math.max(1,Math.round(b/1024))+' KB';
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 
-                <div class="text-center mb-6">
-                    <div class="separator-line mb-3">Sua Visão</div>
-                    <h2 class="text-2xl font-semibold text-invite-green tracking-wide">COMPARTILHE UMA FOTO</h2>
-                </div>
+async function loadMissions(){
+  try{
+    const r=await fetch(`${API}/rest/v1/missions?select=slug,title,description,icon,events!inner(slug)&events.slug=eq.${EV}&order=sort_order`,{headers:{apikey:KEY}});
+    if(!r.ok)throw 0;missions=await r.json();renderMissions();
+  }catch{const b=el('button','m','Não foi possível carregar as missões. Toque para tentar de novo.');b.onclick=loadMissions;$('ms').replaceChildren(b)}
+}
+function renderMissions(){
+  const box=$('ms');box.replaceChildren();
+  const sel=$('ms2');sel.length=1;
+  missions.forEach(m=>{
+    const b=el('button','m'+(doneSet.has(m.slug)?' done':''));
+    b.append(el('span','ic',ICONS[m.icon]||'📸'));
+    const t=el('span');t.append(el('b','',m.title),el('span','d',m.description));b.append(t);
+    if(doneSet.has(m.slug))b.append(el('span','ck','Enviada ✓'));
+    b.onclick=()=>openSheet(m.slug);box.append(b);
+    sel.add(new Option(m.title,m.slug));
+  });
+}
+function openSheet(slug=''){
+  $('nm').value=localStorage.getItem('guestName')||'';
+  $('ms2').value=slug;
+  setMsg();if(!$('dlg').open)$('dlg').showModal();
+}
+$('open').onclick=()=>openSheet();
+$('close').onclick=()=>{if(!busy)$('dlg').close()};
+$('dlg').addEventListener('cancel',e=>{if(busy)e.preventDefault()});
 
-                <form id="uploadForm" class="space-y-5">
-                    <div>
-                        <label class="block text-xs uppercase tracking-widest text-invite-gold mb-1">Seu Nome</label>
-                        <input type="text" id="guestName" required class="w-full bg-invite-cream/50 border border-invite-gold/30 rounded-none px-4 py-3 focus:outline-none focus:border-invite-green text-sm transition-colors" placeholder="Digite seu nome">
-                    </div>
-                    <div>
-                        <label class="block text-xs uppercase tracking-widest text-invite-gold mb-1">Missão / Desafio</label>
-                        <select id="challengeSelect" class="w-full bg-invite-cream/50 border border-invite-gold/30 rounded-none px-4 py-3 focus:outline-none focus:border-invite-green text-sm appearance-none transition-colors">
-                            <option value="Livre">📸 Registro Livre da Festa</option>
-                            <option value="Pai do Noivo">👔 Com o pai do noivo</option>
-                            <option value="Cerimonialista">📋 Com a cerimonialista</option>
-                            <option value="Selfie Noivos">👰‍♂️ Selfie com os noivos</option>
-                            <option value="Brinde">🥂 O brinde mais animado</option>
-                            <option value="Emocao">😢 Alguém emocionado</option>
-                            <option value="Dancinha">🕺 A melhor dancinha</option>
-                            <option value="Decoracao">✨ Detalhe da decoração</option>
-                            <option value="Doces">🍬 A mesa de doces</option>
-                            <option value="Avos">👵 O avô/avó mais estiloso(a)</option>
-                        </select>
-                    </div>
-                    <div class="relative pt-2">
-                        <input type="file" id="photoInput" accept="image/*" required class="hidden">
-                        <label for="photoInput" id="dropZone" class="flex flex-col items-center justify-center w-full h-44 border border-invite-gold/50 bg-invite-cream/30 cursor-pointer hover:bg-invite-cream transition-colors">
-                            <i class="fas fa-camera text-3xl text-invite-green mb-3 opacity-80"></i>
-                            <span class="text-sm text-invite-text uppercase tracking-widest font-medium">Abrir Câmera</span>
-                        </label>
-                        <img id="imagePreview" class="hidden w-full h-52 object-cover border border-invite-green shadow-sm p-1 bg-white">
-                    </div>
-                    <button type="submit" id="btnSubmitForm" class="w-full bg-invite-green text-invite-cream uppercase tracking-widest text-sm font-medium py-4 hover:bg-[#46503e] active:scale-[0.98] transition-all mt-4">
-                        Enviar para os Noivos
-                    </button>
-                </form>
-            </div>
-        </section>
+function kind(f){
+  const ext=(f.name.split('.').pop()||'').toLowerCase();
+  if(f.type.startsWith('video/')||/^(mp4|mov|webm|3gp)$/.test(ext))return 'video';
+  if(f.type.startsWith('image/')||OKX.test(ext))return 'photo';
+  return null;
+}
+$('fi').onchange=e=>{
+  const rej=[];
+  for(const f of e.target.files){
+    const k=kind(f);
+    if(!k){rej.push(f.name+': formato não suportado');continue}
+    if(f.size>(k==='photo'?IMG_MAX:VID_MAX)){rej.push(f.name+': passa de '+(k==='photo'?25:50)+' MB');continue}
+    if(files.some(x=>x.file.name===f.name&&x.file.size===f.size&&x.state!=='done'))continue;
+    files.push({id:++uid,file:f,k,state:'ready',pct:0,note:'',url:URL.createObjectURL(f)});
+  }
+  e.target.value='';renderFiles();
+  setMsg(rej.length?rej.join('. ')+'.':'',rej.length?'e':'');
+};
+function renderFiles(){
+  const list=$('list');list.replaceChildren();
+  files.forEach(f=>{
+    const row=el('div','f');
+    let th;
+    if(f.k==='photo'){th=el('img','th');th.src=f.url;th.alt='';th.onerror=()=>th.replaceWith(el('div','th','🖼️'))}
+    else th=el('div','th','🎬');
+    const mid=el('div');mid.append(el('div','n',f.file.name));
+    const st={ready:fmt(f.file.size),up:'Enviando… '+f.pct+'%',done:'Enviado ✓',err:f.note};
+    mid.append(el('div','s '+(f.state==='err'?'e':f.state==='done'?'o':''),st[f.state]));
+    if(f.state==='up'){const b=el('div','bar'),i=el('i');i.style.width=f.pct+'%';b.append(i);mid.append(b)}
+    row.append(th,mid);
+    if(!busy&&f.state!=='done'){const x=el('button','rm','×');x.setAttribute('aria-label','Remover '+f.file.name);x.onclick=()=>{URL.revokeObjectURL(f.url);files=files.filter(y=>y!==f);renderFiles()};row.append(x)}
+    list.append(row);
+  });
+  const p=files.filter(f=>f.state!=='done');
+  $('tot').textContent=p.length?`${p.length} arquivo(s), ${fmt(p.reduce((s,f)=>s+f.file.size,0))} no total`:'';
+  const hasErr=files.some(f=>f.state==='err');
+  $('send').disabled=busy||!p.length;
+  $('send').textContent=busy?'Enviando…':hasErr?'Tentar de novo':'Enviar';
+}
+function setMsg(t='',c=''){const m=$('msg');m.textContent=t;m.className=t?'msg '+c:'hide'}
 
-        <!-- ABA: DESAFIOS -->
-        <section id="tab-desafios" class="tab-content p-6">
-            <div class="mb-8 text-center">
-                <div class="separator-line mb-3">Interação</div>
-                <h2 class="text-2xl font-semibold text-invite-green tracking-wide">CAÇA AO TESOURO</h2>
-            </div>
-            <div class="grid grid-cols-1 gap-3 pb-6" id="challengesList"></div>
-        </section>
+const call=(body)=>fetch(`${API}/functions/v1/guest-upload`,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(body)}).then(async r=>{const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Erro no envio.');return j});
+function put(url,f,cb){
+  return new Promise((ok,no)=>{
+    const x=new XMLHttpRequest(),fd=new FormData();fd.append('cacheControl','3600');fd.append('',f);
+    x.open('PUT',url);x.upload.onprogress=e=>e.lengthComputable&&cb(Math.round(e.loaded/e.total*100));
+    x.onload=()=>x.status<300?ok():no(new Error('Falha ao enviar o arquivo.'));
+    x.onerror=x.ontimeout=()=>no(new Error('Falha de rede.'));x.timeout=10*60*1000;x.send(fd);
+  });
+}
+async function pool(items,n,fn){let i=0;await Promise.all(Array.from({length:Math.min(n,items.length)},async()=>{while(i<items.length)await fn(items[i++])}))}
 
-        <!-- ABA: LOGIN ADMINISTRATIVO -->
-        <section id="tab-login" class="tab-content p-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-invite-gold/20 p-8 relative overflow-hidden mt-4">
-                <div class="text-center mb-8">
-                    <i class="fas fa-lock text-3xl text-invite-gold mb-4 opacity-80"></i>
-                    <h2 class="text-2xl font-semibold text-invite-green tracking-wide mb-2">ÁREA RESTRITA</h2>
-                    <p class="text-xs text-invite-gold uppercase tracking-widest">Acesso exclusivo dos noivos</p>
-                </div>
-                <form id="loginForm" class="space-y-6">
-                    <div>
-                        <input type="text" id="adminUser" required class="w-full bg-transparent border-b border-invite-gold/50 px-2 py-3 focus:outline-none focus:border-invite-green text-center text-lg placeholder-invite-gold/50" placeholder="Usuário">
-                    </div>
-                    <div>
-                        <input type="password" id="adminPass" required class="w-full bg-transparent border-b border-invite-gold/50 px-2 py-3 focus:outline-none focus:border-invite-green text-center text-lg placeholder-invite-gold/50" placeholder="Senha">
-                    </div>
-                    <p id="loginError" class="text-red-700 text-xs text-center hidden uppercase tracking-widest font-semibold">Credenciais incorretas</p>
-                    <button type="submit" class="w-full bg-invite-green text-invite-cream uppercase tracking-widest text-sm font-medium py-4">Acessar Mural</button>
-                </form>
-            </div>
-        </section>
-
-        <!-- ABA: MURAL PRIVADO -->
-        <section id="tab-mural" class="tab-content p-6 hidden">
-            <div class="mb-8 text-center relative">
-                <button onclick="logoutAdmin()" class="absolute right-0 top-0 text-invite-gold hover:text-red-800 text-sm">
-                    <i class="fas fa-sign-out-alt"></i> Sair
-                </button>
-                <div class="separator-line mb-3">Galeria Privada</div>
-                <h2 class="text-2xl font-semibold text-invite-green tracking-wide">FOTOS RECEBIDAS</h2>
-            </div>
-            
-            <button id="btnDownloadZip" onclick="baixarTodasFotos()" class="w-full mb-6 border border-invite-green text-invite-green uppercase tracking-widest text-xs font-semibold py-3 hover:bg-invite-green hover:text-white transition-all flex items-center justify-center gap-2">
-                <i class="fas fa-download"></i> Baixar Todas as Fotos (.ZIP)
-            </button>
-
-            <div class="columns-2 gap-3 space-y-3" id="photoGrid">
-                <!-- Fotos carregadas do banco aparecerão aqui -->
-            </div>
-        </section>
-    </main>
-
-    <!-- Bottom Navigation -->
-    <nav class="glass-nav fixed bottom-0 w-full px-8 py-4 flex justify-between items-center z-50">
-        <button onclick="switchTab('tab-desafios')" class="nav-btn flex flex-col items-center gap-1 text-invite-gold hover:text-invite-green w-16 transition-colors" data-target="tab-desafios">
-            <i class="fas fa-list text-lg"></i><span class="text-[9px] uppercase tracking-widest font-semibold mt-1">Missões</span>
-        </button>
-        <button onclick="switchTab('tab-enviar')" class="nav-btn relative -top-5 bg-invite-green text-invite-cream w-16 h-16 rounded-full flex justify-center items-center shadow-lg shadow-invite-green/30 border-4 border-[#F6F4F0] transform transition-transform hover:scale-105" data-target="tab-enviar">
-            <i class="fas fa-camera text-xl"></i>
-        </button>
-        <button onclick="handleNoivosTab()" class="nav-btn flex flex-col items-center gap-1 text-invite-gold hover:text-invite-green w-16 transition-colors" data-target="tab-login">
-            <i class="fas fa-lock text-lg" id="lockIcon"></i><span class="text-[9px] uppercase tracking-widest font-semibold mt-1">Noivos</span>
-        </button>
-    </nav>
-
-    <script>
-        // ==========================================
-        // CONFIGURAÇÃO DO SUPABASE (ATUALIZADA)
-        // ==========================================
-        const SUPABASE_URL = 'https://yuuqhtggevxuhknqxusy.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'sb_publishable_8hdnGd_ZVhMY7cd7tQ-1Ow_WTO1Q_2m';
-        
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        let isUserLoggedIn = false;
-
-        // Controle de Abas
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => { el.classList.remove('active'); el.classList.add('hidden'); });
-            const activeTab = document.getElementById(tabId);
-            activeTab.classList.remove('hidden'); activeTab.classList.add('active');
-            
-            document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.remove('text-invite-green'); btn.classList.add('text-invite-gold'); });
-            let targetNav = (tabId === 'tab-mural' || tabId === 'tab-login') ? 'tab-login' : tabId;
-            const activeBtn = document.querySelector(`.nav-btn[data-target="${targetNav}"]`);
-            if(activeBtn && targetNav !== 'tab-enviar') { activeBtn.classList.add('text-invite-green'); activeBtn.classList.remove('text-invite-gold'); }
-            window.scrollTo(0,0);
-        }
-
-        function handleNoivosTab() {
-            if (isUserLoggedIn) { carregarMural(); switchTab('tab-mural'); } 
-            else { switchTab('tab-login'); }
-        }
-
-        // Preview da Foto
-        const photoInput = document.getElementById('photoInput');
-        const imagePreview = document.getElementById('imagePreview');
-        const dropZone = document.getElementById('dropZone');
-        let currentFile = null;
-
-        photoInput.addEventListener('change', function(e) {
-            currentFile = e.target.files[0];
-            if (currentFile) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    imagePreview.src = event.target.result;
-                    imagePreview.classList.remove('hidden');
-                    dropZone.classList.add('hidden');
-                }
-                reader.readAsDataURL(currentFile);
-            }
-        });
-
-        // Envio para o Banco de Dados
-        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if(!currentFile) return alert('Por favor, selecione uma foto.');
-
-            const btn = document.getElementById('btnSubmitForm');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-            btn.disabled = true;
-
-            const nome = document.getElementById('guestName').value;
-            const desafio = document.getElementById('challengeSelect').value;
-            const fileName = `${Date.now()}_${currentFile.name.replace(/\s+/g, '_')}`;
-
-            try {
-                // 1. Upload da Imagem pro Storage
-                const { data: uploadData, error: uploadError } = await _supabase.storage.from('fotos').upload(fileName, currentFile);
-                if (uploadError) throw uploadError;
-
-                // 2. Pegar URL Pública
-                const { data: urlData } = _supabase.storage.from('fotos').getPublicUrl(fileName);
-                
-                // 3. Salvar na Tabela
-                const { error: dbError } = await _supabase.from('mural').insert([{ nome: nome, desafio: desafio, url: urlData.publicUrl }]);
-                if (dbError) throw dbError;
-
-                alert('Foto enviada com sucesso para os noivos!');
-                document.getElementById('uploadForm').reset();
-                imagePreview.classList.add('hidden');
-                dropZone.classList.remove('hidden');
-                currentFile = null;
-                switchTab('tab-desafios');
-
-            } catch (error) {
-                console.error(error);
-                alert('Erro ao enviar foto. Verifique a conexão.');
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
-        });
-
-        // Login do Administrador
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const user = document.getElementById('adminUser').value;
-            const pass = document.getElementById('adminPass').value;
-            
-            if(user.toLowerCase() === 'noivos' && pass === '28112026') {
-                isUserLoggedIn = true;
-                document.getElementById('loginError').classList.add('hidden');
-                document.getElementById('lockIcon').classList.remove('fa-lock');
-                document.getElementById('lockIcon').classList.add('fa-unlock');
-                document.getElementById('loginForm').reset();
-                carregarMural();
-                switchTab('tab-mural');
-            } else {
-                document.getElementById('loginError').classList.remove('hidden');
-            }
-        });
-
-        function logoutAdmin() {
-            isUserLoggedIn = false;
-            document.getElementById('lockIcon').classList.remove('fa-unlock');
-            document.getElementById('lockIcon').classList.add('fa-lock');
-            switchTab('tab-enviar');
-        }
-
-        // Carregar Mural do Banco
-        async function carregarMural() {
-            const grid = document.getElementById('photoGrid');
-            grid.innerHTML = '<p class="text-center text-xs col-span-2 text-invite-gold">Carregando fotos...</p>';
-
-            const { data, error } = await _supabase.from('mural').select('*').order('created_at', { ascending: false });
-            
-            if (error) {
-                grid.innerHTML = '<p class="text-center text-xs col-span-2 text-red-500">Erro ao carregar.</p>';
-                return;
-            }
-
-            if (data.length === 0) {
-                grid.innerHTML = '<p class="text-center text-xs col-span-2 text-invite-gold">Nenhuma foto recebida ainda.</p>';
-                return;
-            }
-
-            grid.innerHTML = '';
-            data.forEach(item => {
-                grid.innerHTML += `
-                    <div class="break-inside-avoid relative overflow-hidden shadow-sm border p-1 bg-white border-invite-gold/30 mb-3">
-                        <img src="${item.url}" class="w-full h-auto">
-                        <div class="absolute bottom-1 left-1 right-1 bg-invite-green/90 p-2 text-invite-cream text-center">
-                            <p class="text-[9px] uppercase tracking-widest">${item.desafio} - ${item.nome}</p>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        // Baixar em Lote (.ZIP)
-        async function baixarTodasFotos() {
-            const btn = document.getElementById('btnDownloadZip');
-            const originalText = btn.innerHTML;
-            
-            const { data, error } = await _supabase.from('mural').select('*');
-            if (error || !data || data.length === 0) return alert('Nenhuma foto para baixar.');
-
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Compactando ZIP...';
-            btn.disabled = true;
-
-            const zip = new JSZip();
-            
-            for (let i = 0; i < data.length; i++) {
-                try {
-                    const response = await fetch(data[i].url);
-                    const blob = await response.blob();
-                    const ext = data[i].url.split('.').pop().split('?')[0] || 'jpg';
-                    const nomeSeguro = data[i].nome.replace(/[^a-zA-Z0-9]/g, '');
-                    const desafioSeguro = data[i].desafio.replace(/[^a-zA-Z0-9]/g, '');
-                    zip.file(`Foto_${i+1}_${desafioSeguro}_${nomeSeguro}.${ext}`, blob);
-                } catch (e) { console.error('Erro ao baixar uma imagem', e); }
-            }
-
-            zip.generateAsync({type:"blob"}).then(function(content) {
-                saveAs(content, "Fotos_Casamento_Nathalia_e_Gabriel.zip");
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            });
-        }
-
-        // Renderizar Desafios
-        const desafios = [
-            { id: 'Pai do Noivo', icon: 'fa-user-tie', title: 'O Pai do Noivo', desc: 'Encontre-o e garanta esse registro.' },
-            { id: 'Cerimonialista', icon: 'fa-clipboard-list', title: 'A Cerimonialista', desc: 'Ela está correndo para tudo ser perfeito!' },
-            { id: 'Selfie Noivos', icon: 'fa-heart', title: 'Com os Noivos', desc: 'O registro mais aguardado da noite.' },
-            { id: 'Brinde', icon: 'fa-champagne-glasses', title: 'Um Brinde', desc: 'Pegue sua taça e junte sua mesa.' },
-            { id: 'Emocao', icon: 'fa-face-grin-tears', title: 'Emoção Pura', desc: 'Aquela lágrima de alegria na cerimônia.' },
-            { id: 'Dancinha', icon: 'fa-music', title: 'Rei da Pista', desc: 'O passinho mais animado da festa.' },
-            { id: 'Decoracao', icon: 'fa-leaf', title: 'A Decoração', desc: 'Aquele detalhe que chamou sua atenção.' },
-            { id: 'Doces', icon: 'fa-cake-candles', title: 'Mesa de Doces', desc: 'O paraíso antes de ser atacado.' }
-        ];
-
-        const challengesList = document.getElementById('challengesList');
-        desafios.forEach(d => {
-            challengesList.innerHTML += `
-                <div class="bg-white p-4 border border-invite-gold/30 flex items-center justify-between hover:border-invite-green transition-colors cursor-pointer" onclick="cumprirDesafio('${d.id}')">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-invite-cream flex items-center justify-center text-invite-green border border-invite-gold/20"><i class="fas ${d.icon} text-lg"></i></div>
-                        <div><h3 class="font-semibold text-invite-text uppercase tracking-widest text-xs">${d.title}</h3><p class="text-[11px] text-invite-gold italic mt-0.5">${d.desc}</p></div>
-                    </div>
-                    <button class="text-invite-gold hover:text-invite-green p-2 transition-colors"><i class="fas fa-camera"></i></button>
-                </div>
-            `;
-        });
-
-        window.cumprirDesafio = function(id) { document.getElementById('challengeSelect').value = id; switchTab('tab-enviar'); }
-    </script>
+$('send').onclick=async()=>{
+  if(busy)return;
+  const name=$('nm').value.trim();
+  if(name.length<2)return setMsg('Digite seu nome para continuar.','e'),$('nm').focus();
+  localStorage.setItem('guestName',name);
+  const slug=$('ms2').value,todo=files.filter(f=>f.state!=='done');
+  if(!todo.length)return;
+  busy=true;setMsg();todo.forEach(f=>{f.state='up';f.pct=0});renderFiles();
+  for(let c=0;c<todo.length;c+=20){
+    const chunk=todo.slice(c,c+20);
+    try{
+      const r=await call({action:'request',event_slug:EV,guest_name:name,mission_slug:slug||undefined,files:chunk.map(f=>({name:f.file.name,type:f.file.type,size:f.file.size}))});
+      r.rejected.forEach(x=>{const f=chunk[x.index];f.state='err';f.note=x.reason});
+      const ups=r.uploads.map(u=>({u,f:chunk[u.index]})),okIds=[];
+      await pool(ups,3,async({u,f})=>{
+        try{await put(u.signed_url,f.file,p=>{f.pct=p;renderFiles()});okIds.push({id:u.media_id,f})}
+        catch(e){f.state='err';f.note=e.message+' Toque em tentar de novo.'}
+        renderFiles();
+      });
+      if(okIds.length){
+        const cr=await call({action:'confirm',event_slug:EV,media_ids:okIds.map(o=>o.id)});
+        okIds.forEach(o=>{const s=(cr.results.find(x=>x.id===o.id)||{}).status;
+          if(s==='ready'){o.f.state='done'}else{o.f.state='err';o.f.note=s==='failed'?'Arquivo recusado na verificação.':'Envio não confirmado. Tente de novo.'}});
+      }
+    }catch(e){chunk.forEach(f=>{if(f.state==='up'){f.state='err';f.note=e.message}})}
+  }
+  busy=false;renderFiles();
+  const ok=files.filter(f=>f.state==='done').length,bad=files.filter(f=>f.state==='err').length;
+  if(ok&&slug){doneSet.add(slug);localStorage.setItem('doneMissions',JSON.stringify([...doneSet]));renderMissions()}
+  if(bad)setMsg(`${ok} enviado(s) e ${bad} com falha. Toque em “Tentar de novo” para reenviar só os que falharam.`,'e');
+  else{setMsg(`Pronto! ${ok} arquivo(s) enviado(s) para os noivos. Obrigado!`,'o');files.forEach(f=>URL.revokeObjectURL(f.url));files=[];renderFiles()}
+};
+loadMissions();
+</script>
 </body>
 </html>
