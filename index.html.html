@@ -174,9 +174,9 @@
 
     <script>
         // ==========================================
-        // CONFIGURAÇÃO DO SUPABASE
+        // CONFIGURAÇÃO DO SUPABASE (ATUALIZADA)
         // ==========================================
-        const SUPABASE_URL = 'https://seu-projeto.supabase.co'; // Substitua pela sua URL do Supabase
+        const SUPABASE_URL = 'https://yuuqhtggevxuhknqxusy.supabase.co'; 
         const SUPABASE_ANON_KEY = 'sb_publishable_8hdnGd_ZVhMY7cd7tQ-1Ow_WTO1Q_2m';
         
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -224,7 +224,6 @@
         document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             if(!currentFile) return alert('Por favor, selecione uma foto.');
-            if(SUPABASE_URL.includes('seu-projeto')) return alert('Por favor, insira a URL correta do seu projeto Supabase no código!');
 
             const btn = document.getElementById('btnSubmitForm');
             const originalText = btn.innerHTML;
@@ -293,8 +292,6 @@
         async function carregarMural() {
             const grid = document.getElementById('photoGrid');
             grid.innerHTML = '<p class="text-center text-xs col-span-2 text-invite-gold">Carregando fotos...</p>';
-            
-            if(SUPABASE_URL.includes('seu-projeto')) return grid.innerHTML = '<p class="text-center text-xs col-span-2 text-red-500">Configure a URL do Supabase.</p>';
 
             const { data, error } = await _supabase.from('mural').select('*').order('created_at', { ascending: false });
             
