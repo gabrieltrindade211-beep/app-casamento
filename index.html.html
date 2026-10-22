@@ -174,14 +174,12 @@
 
     <script>
         // ==========================================
-        // 1. CONFIGURE SEU SUPABASE AQUI
+        // CONFIGURAÇÃO DO SUPABASE
         // ==========================================
-        const SUPABASE_URL = 'SUA_URL_DO_SUPABASE_AQUI'; 
-        const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANONIMA_AQUI';
+        const SUPABASE_URL = 'https://seu-projeto.supabase.co'; // Substitua pela sua URL do Supabase
+        const SUPABASE_ANON_KEY = 'sb_publishable_8hdnGd_ZVhMY7cd7tQ-1Ow_WTO1Q_2m';
         
-        const supabaseUrl = SUPABASE_URL;
-        const supabaseKey = SUPABASE_ANON_KEY;
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let isUserLoggedIn = false;
 
@@ -226,7 +224,7 @@
         document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             if(!currentFile) return alert('Por favor, selecione uma foto.');
-            if(SUPABASE_URL === 'SUA_URL_DO_SUPABASE_AQUI') return alert('Configure as chaves do banco de dados primeiro!');
+            if(SUPABASE_URL.includes('seu-projeto')) return alert('Por favor, insira a URL correta do seu projeto Supabase no código!');
 
             const btn = document.getElementById('btnSubmitForm');
             const originalText = btn.innerHTML;
@@ -296,7 +294,7 @@
             const grid = document.getElementById('photoGrid');
             grid.innerHTML = '<p class="text-center text-xs col-span-2 text-invite-gold">Carregando fotos...</p>';
             
-            if(SUPABASE_URL === 'SUA_URL_DO_SUPABASE_AQUI') return grid.innerHTML = '<p class="text-center text-xs col-span-2 text-red-500">Banco não configurado.</p>';
+            if(SUPABASE_URL.includes('seu-projeto')) return grid.innerHTML = '<p class="text-center text-xs col-span-2 text-red-500">Configure a URL do Supabase.</p>';
 
             const { data, error } = await _supabase.from('mural').select('*').order('created_at', { ascending: false });
             
