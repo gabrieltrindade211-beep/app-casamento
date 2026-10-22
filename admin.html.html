@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Área dos noivos</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Great+Vibes&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{--ol:#55604C;--cr:#F6F4F0;--wh:#FDFBF7;--go:#9A947A;--gt:#6F6951;--ink:#2F3329;--err:#9B2C2C;--ok:#3F6B3A;--ln:rgba(154,148,122,.4)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cr);color:var(--ink);font:16px/1.5 'Hanken Grotesk',system-ui,sans-serif}
+h1,h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;margin:0;color:var(--ol)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--go);outline-offset:2px}
+.hide{display:none!important}
+.wrap{max-width:1100px;margin:0 auto;padding:1rem 1rem 4rem}
+.card{background:var(--wh);border:1px solid var(--ln);border-radius:1rem;padding:1.25rem}
+#login{max-width:400px;margin:12vh auto 0;padding:0 1rem}
+#login h1{font-size:2.2rem;text-align:center;margin-bottom:.25rem}
+#login p.s{text-align:center;color:var(--gt);margin:0 0 1rem}
+label{display:block;font-weight:600;margin:.8rem 0 .25rem;font-size:.95rem}
+input,select{width:100%;padding:.75rem .9rem;border:1px solid var(--go);border-radius:.7rem;background:#fff}
+.btn{border:0;border-radius:999px;padding:.75rem 1.25rem;font-weight:600;cursor:pointer;background:var(--ol);color:var(--cr)}
+.btn.o{background:transparent;color:var(--ol);border:1px solid var(--ol)}
+.btn.d{background:var(--err)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+#login .btn{width:100%;margin-top:1.1rem}
+header.bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+header.bar h1{font-size:1.9rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.75rem;margin-bottom:1rem}
+.stat b{display:block;font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--ol);line-height:1.1}
+.stat span{color:var(--gt);font-size:.9rem}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.6rem;margin-bottom:1rem}
+.filters label{margin:0 0 .15rem;font-size:.85rem;color:var(--gt)}
+.acts{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-bottom:1rem}
+.acts .n{color:var(--gt);margin-right:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.7rem}
+.it{position:relative;background:#fff;border:1px solid var(--ln);border-radius:.8rem;overflow:hidden}
+.th{display:block;width:100%;aspect-ratio:1;object-fit:cover;background:var(--cr);cursor:pointer;border:0;padding:0}
+.it .ck{position:absolute;top:.4rem;left:.4rem;width:1.5rem;height:1.5rem;padding:0;accent-color:var(--ol)}
+.it .vb{position:absolute;top:.4rem;right:.4rem;background:rgba(0,0,0,.6);color:#fff;border-radius:.4rem;font-size:.75rem;padding:.1rem .4rem}
+.cap{padding:.45rem .6rem;font-size:.85rem}
+.cap b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cap span{color:var(--gt)}
+.empty{text-align:center;color:var(--gt);padding:2.5rem 1rem}
+#msg{margin:0 0 1rem;padding:.8rem 1rem;border-radius:.75rem;font-weight:500}
+#msg.e{background:#fbeaea;color:var(--err)}#msg.o{background:#e8f1e6;color:var(--ok)}#msg.i{background:#eee9db;color:var(--ink)}
+dialog{border:0;padding:0;border-radius:1rem;width:min(96vw,900px);max-height:94dvh;background:var(--wh);overflow:auto}
+dialog::backdrop{background:rgba(20,24,17,.7)}
+.lb{padding:1rem}
+.lb .m{width:100%;max-height:66dvh;object-fit:contain;background:#111;border-radius:.6rem;display:block}
+.lb .inf{margin:.75rem 0;color:var(--gt)}
+.lb .row{display:flex;gap:.5rem;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<section id="login" class="hide">
+  <h1>Área dos noivos</h1>
+  <p class="s">Entre com a conta de administrador do álbum.</p>
+  <form id="lf" class="card">
+    <label for="em">E-mail</label><input id="em" type="email" autocomplete="username" required>
+    <label for="pw">Senha</label><input id="pw" type="password" autocomplete="current-password" required>
+    <p id="le" class="hide" role="alert" style="color:var(--err);font-weight:500;margin:.8rem 0 0"></p>
+    <button class="btn" type="submit" id="lb">Entrar</button>
+  </form>
+</section>
+
+<div id="app" class="wrap hide">
+  <header class="bar"><h1>Álbum de Nathalia e Gabriel</h1>
+    <div><button class="btn o" id="rf">Atualizar</button> <button class="btn o" id="lo">Sair</button></div></header>
+  <div class="stats" id="stats"></div>
+  <div class="filters card">
+    <div><label for="ft">Tipo</label><select id="ft"><option value="">Todos</option><option value="photo">Fotos</option><option value="video">Vídeos</option></select></div>
+    <div><label for="fm">Missão</label><select id="fm"><option value="">Todas</option></select></div>
+    <div><label for="fs">Convidado</label><input id="fs" type="search" placeholder="Buscar pelo nome"></div>
+    <div><label for="fa">De</label><input id="fa" type="date"></div>
+    <div><label for="fb">Até</label><input id="fb" type="date"></div>
+  </div>
+  <div class="acts">
+    <span class="n" id="cnt" aria-live="polite"></span>
+    <button class="btn o" id="sp">Selecionar a página</button>
+    <button class="btn" id="zs" disabled>Baixar selecionados</button>
+    <button class="btn" id="za">Baixar tudo do filtro (ZIP)</button>
+  </div>
+  <div id="msg" class="hide" role="status"></div>
+  <div class="grid" id="grid"></div>
+  <div class="empty hide" id="empty">Nenhum arquivo encontrado com esses filtros.</div>
+  <p style="text-align:center;margin-top:1.25rem"><button class="btn o hide" id="more">Carregar mais</button></p>
+</div>
+
+<dialog id="dlg"><div class="lb"><div id="lm"></div><div class="inf" id="li"></div>
+  <div class="row"><button class="btn" id="ld">Baixar</button><button class="btn d" id="lx">Excluir</button><button class="btn o" id="lc">Fechar</button></div></div></dialog>
+
+<script>
+const API='https://yuuqhtggevxuhknqxusy.supabase.co',KEY='sb_publishable_8hdnGd_ZVhMY7cd7tQ-1Ow_WTO1Q_2m',EV='nathalia-gabriel',B='event-media',PS=24,ZIP_WARN=1.5*1024**3;
+const sb=supabase.createClient(API,KEY),$=id=>document.getElementById(id);
+let EID,missions={},items=[],urls={},sel=new Set(),page=0,total=0,cur=null,busy=false;
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const fmtB=b=>b>=1024**3?(b/1024**3).toFixed(2)+' GB':b>=1048576?(b/1048576).toFixed(1)+' MB':Math.round(b/1024)+' KB';
+const fmtD=d=>new Date(d).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+const slug=s=>(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,30)||'sem-nome';
+const fname=m=>`${new Date(m.created_at).toISOString().slice(0,16).replace(/[-:T]/g,'')}_${slug(m.guest_name)}_${slug(missions[m.mission_id]||'livre')}_${m.id.slice(0,6)}.${m.storage_path.split('.').pop()}`;
+function msg(t='',c='i'){const m=$('msg');m.textContent=t;m.className=t?c:'hide';if(t)m.id='msg'}
+function show(w){$('login').classList.toggle('hide',w!=='login');$('app').classList.toggle('hide',w!=='app')}
+
+$('lf').onsubmit=async e=>{e.preventDefault();$('le').classList.add('hide');$('lb').disabled=true;
+  const{error}=await sb.auth.signInWithPassword({email:$('em').value.trim(),password:$('pw').value});
+  $('pw').value='';$('lb').disabled=false;
+  if(error){$('le').textContent='E-mail ou senha incorretos.';$('le').classList.remove('hide');return}
+  boot()};
+$('lo').onclick=async()=>{await sb.auth.signOut();items=[];urls={};sel.clear();$('grid').replaceChildren();show('login')};
+$('rf').onclick=()=>{stats();reload()};
+
+async function boot(){
+  const{data:{session}}=await sb.auth.getSession();if(!session)return show('login');
+  const{data:ev}=await sb.from('events').select('id').eq('slug',EV).single();EID=ev&&ev.id;
+  const{data:ad}=EID?await sb.from('event_admins').select('event_id').eq('event_id',EID).maybeSingle():{};
+  if(!ad){await sb.auth.signOut();show('login');$('le').textContent='Esta conta não tem acesso ao álbum.';$('le').classList.remove('hide');return}
+  show('app');
+  const{data:ms}=await sb.from('missions').select('id,title').eq('event_id',EID).order('sort_order');
+  (ms||[]).forEach(m=>{missions[m.id]=m.title;$('fm').add(new Option(m.title,m.id))});
+  stats();reload();
+}
+async function stats(){
+  const{data,error}=await sb.rpc('admin_event_stats',{p_event:EID});if(error||!data)return;
+  const box=$('stats');box.replaceChildren();
+  [[data.photos,'fotos'],[data.videos,'vídeos'],[data.batches,'envios'],[data.guests,'convidados'],[fmtB(+data.bytes),'em uso'],[data.last_upload_at?fmtD(data.last_upload_at):'—','último envio']]
+   .forEach(([v,l])=>{const s=el('div','card stat');s.append(el('b','',v),el('span','',l));box.append(s)});
+}
+function qry(cols,opt){
+  let q=sb.from('media').select(cols,opt).eq('event_id',EID).eq('status','ready');
+  const t=$('ft').value,m=$('fm').value,s=$('fs').value.trim().replace(/[%,()*]/g,''),a=$('fa').value,b=$('fb').value;
+  if(t)q=q.eq('media_type',t);if(m)q=q.eq('mission_id',m);if(s)q=q.ilike('guest_name','%'+s+'%');
+  if(a)q=q.gte('created_at',a+'T00:00:00-03:00');if(b)q=q.lte('created_at',b+'T23:59:59-03:00');
+  return q.order('created_at',{ascending:false});
+}
+function reload(){page=0;items=[];sel.clear();$('grid').replaceChildren();msg();loadPage()}
+async function loadPage(){
+  const{data,count,error}=await qry('*',{count:'exact'}).range(page*PS,page*PS+PS-1);
+  if(error)return msg('Não foi possível carregar a galeria. Atualize a página e entre de novo.','e');
+  total=count||0;
+  if(data.length){
+    const{data:su}=await sb.storage.from(B).createSignedUrls(data.map(m=>m.storage_path),3600);
+    (su||[]).forEach(u=>{if(u.signedUrl)urls[u.path]=u.signedUrl});
+  }
+  data.forEach(m=>{items.push(m);$('grid').append(card(m))});
+  $('cnt').textContent=`${items.length} de ${total} arquivo(s)`;
+  $('empty').classList.toggle('hide',total>0);
+  $('more').classList.toggle('hide',items.length>=total);
+  upd();
+}
+$('more').onclick=()=>{page++;loadPage()};
+['ft','fm','fa','fb'].forEach(i=>$(i).onchange=reload);
+let tm;$('fs').oninput=()=>{clearTimeout(tm);tm=setTimeout(reload,350)};
+
+function card(m){
+  const d=el('div','it'),u=urls[m.storage_path];
+  let th;
+  if(m.media_type==='photo'){th=el('img','th');th.loading='lazy';th.alt='Foto de '+m.guest_name;if(u)th.src=u}
+  else{th=el('video','th');th.preload='metadata';th.muted=true;th.setAttribute('playsinline','');if(u)th.src=u+'#t=0.1'}
+  const wrap=el('button','th');wrap.style.cssText='padding:0;border:0;display:block;width:100%';wrap.setAttribute('aria-label','Abrir arquivo de '+m.guest_name);
+  th.style.pointerEvents='none';wrap.append(th);wrap.onclick=()=>open(m);
+  const ck=el('input','ck');ck.type='checkbox';ck.setAttribute('aria-label','Selecionar');ck.checked=sel.has(m.id);
+  ck.onchange=()=>{ck.checked?sel.add(m.id):sel.delete(m.id);upd()};m.__ck=ck;
+  d.append(wrap,ck);if(m.media_type==='video')d.append(el('span','vb','vídeo'));
+  const c=el('div','cap');c.append(el('b','',m.guest_name),el('span','',fmtD(m.created_at)+(m.mission_id?' · '+(missions[m.mission_id]||''):'')));
+  d.append(c);m.__el=d;return d;
+}
+function upd(){$('zs').disabled=busy||!sel.size;$('zs').textContent=sel.size?`Baixar selecionados (${sel.size})`:'Baixar selecionados';$('za').disabled=busy||!total}
+$('sp').onclick=()=>{const all=items.every(m=>sel.has(m.id));items.forEach(m=>{all?sel.delete(m.id):sel.add(m.id);m.__ck.checked=!all});upd()};
+
+function open(m){
+  cur=m;const u=urls[m.storage_path],box=$('lm');box.replaceChildren();
+  let x;if(m.media_type==='photo'){x=el('img','m');x.alt='Foto de '+m.guest_name}else{x=el('video','m');x.controls=true;x.setAttribute('playsinline','')}
+  x.src=u;box.append(x);
+  $('li').textContent=`${m.guest_name} · ${fmtD(m.created_at)} · ${missions[m.mission_id]||'Registro livre'} · ${fmtB(m.size_bytes)}`;
+  $('dlg').showModal();
+}
+$('lc').onclick=()=>{$('dlg').close()};
+$('dlg').addEventListener('close',()=>{const v=$('lm').querySelector('video');if(v)v.pause();$('lm').replaceChildren()});
+$('ld').onclick=async()=>{
+  const{data,error}=await sb.storage.from(B).createSignedUrl(cur.storage_path,120,{download:fname(cur)});
+  if(error)return msg('Não foi possível gerar o download. Tente de novo.','e');
+  const a=el('a');a.href=data.signedUrl;a.click();
+};
+$('lx').onclick=async()=>{
+  if(!confirm(`Excluir este arquivo de ${cur.guest_name}? Isso não pode ser desfeito.`))return;
+  const{error:e1}=await sb.storage.from(B).remove([cur.storage_path]);
+  if(e1)return msg('Não foi possível excluir o arquivo. Nada foi apagado.','e');
+  const{error:e2}=await sb.from('media').delete().eq('id',cur.id);
+  if(e2)return msg('O arquivo foi apagado, mas o registro continua. Atualize e tente excluir de novo.','e');
+  $('dlg').close();items=items.filter(m=>m!==cur);sel.delete(cur.id);cur.__el.remove();total--;
+  $('cnt').textContent=`${items.length} de ${total} arquivo(s)`;upd();stats();msg('Arquivo excluído.','o');
+};
+
+async function zip(list,label){
+  if(!list.length||busy)return;
+  const bytes=list.reduce((s,m)=>s+Number(m.size_bytes),0);
+  if(bytes>ZIP_WARN&&!confirm(`Este ZIP terá cerca de ${fmtB(bytes)} e pode travar o navegador. Recomendo filtrar por período ou tipo e baixar em partes. Continuar mesmo assim?`))return;
+  busy=true;upd();const Z=new JSZip(),fails=[],names=new Set();let i=0;
+  for(const m of list){
+    msg(`Preparando ${++i} de ${list.length}…`);
+    try{
+      const{data,error}=await sb.storage.from(B).createSignedUrl(m.storage_path,600);if(error)throw error;
+      const r=await fetch(data.signedUrl);if(!r.ok)throw new Error('HTTP '+r.status);
+      let n=fname(m);if(names.has(n))n=m.id+'_'+n;names.add(n);
+      Z.file(n,await r.blob(),{compression:'STORE'});
+    }catch(e){fails.push(`${m.guest_name} (${fmtD(m.created_at)}) - ${m.original_name||m.id}: ${e.message||'falha'}`)}
+  }
+  Z.file('RELATORIO.txt',`Arquivos no ZIP: ${list.length-fails.length} de ${list.length}\n`+(fails.length?`\nNÃO incluídos:\n${fails.join('\n')}\n`:'\nTodos os arquivos foram incluídos.\n'));
+  try{
+    const blob=await Z.generateAsync({type:'blob',streamFiles:true},p=>msg(`Compactando ${Math.round(p.percent)}%…`));
+    const a=el('a');a.href=URL.createObjectURL(blob);a.download=`album-nathalia-gabriel-${label}.zip`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),60000);
+    fails.length?msg(`ZIP baixado, mas ${fails.length} de ${list.length} arquivo(s) NÃO foram incluídos. A lista está em RELATORIO.txt dentro do ZIP. Baixe de novo para tentar recuperar.`,'e')
+               :msg(`ZIP baixado com todos os ${list.length} arquivo(s).`,'o');
+  }catch(e){msg('Não foi possível montar o ZIP. Tente com menos arquivos.','e')}
+  busy=false;upd();
+};
+$('zs').onclick=()=>zip(items.filter(m=>sel.has(m.id)),'selecionados');
+$('za').onclick=async()=>{
+  msg('Listando arquivos…');const all=[];
+  for(let f=0;;f+=1000){const{data,error}=await qry('id,guest_name,mission_id,storage_path,created_at,size_bytes,original_name').range(f,f+999);
+    if(error)return msg('Não foi possível listar os arquivos.','e');all.push(...data);if(data.length<1000)break}
+  zip(all,'completo');
+};
+sb.auth.onAuthStateChange(ev=>{if(ev==='SIGNED_OUT')show('login')});
+boot();
+</script>
+</body>
+</html>
