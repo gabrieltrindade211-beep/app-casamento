@@ -13,16 +13,15 @@
                 extend: {
                     colors: {
                         invite: { 
-                            green: '#55604C', /* Verde Oliva do convite da recepção */
-                            cream: '#F6F4F0', /* Fundo off-white do convite principal */
-                            gold: '#9A947A',  /* Dourado fendi dos textos menores */
-                            text: '#4A4A4A'   /* Texto escuro para legibilidade */
+                            green: '#55604C', 
+                            cream: '#F6F4F0', 
+                            gold: '#9A947A',  
+                            text: '#4A4A4A'   
                         }
                     },
                     fontFamily: {
                         script: ['"Great Vibes"', 'cursive'],
-                        serif: ['"Cormorant Garamond"', 'serif'],
-                        sans: ['"Cormorant Garamond"', 'serif'] /* Forçando serif para elegância geral */
+                        serif: ['"Cormorant Garamond"', 'serif']
                     }
                 }
             }
@@ -51,7 +50,6 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Estilização do Monograma NG */
         .monogram {
             font-family: 'Cormorant Garamond', serif;
             font-size: 2.5rem;
@@ -93,30 +91,25 @@
     <!-- Header Fiel ao Convite -->
     <header class="bg-invite-green text-invite-cream p-6 rounded-b-3xl relative z-10 shadow-md">
         <div class="text-center flex flex-col items-center">
-            <!-- Monograma NG -->
             <div class="monogram tracking-widest">N<span class="ml-[-0.2em] mt-[0.3em]">G</span></div>
             
-            <!-- Linha e Data -->
             <div class="flex items-center justify-center gap-3 w-full max-w-[250px] mb-4">
                 <div class="h-px bg-invite-cream w-8 opacity-60"></div>
                 <p class="text-[0.7rem] uppercase tracking-[0.2em] text-invite-cream opacity-90">28 de Novembro de 2026</p>
                 <div class="h-px bg-invite-cream w-8 opacity-60"></div>
             </div>
 
-            <!-- Nomes -->
             <h1 class="text-5xl font-script text-invite-cream mt-1 mb-2 font-normal">Nathalia e Gabriel</h1>
             
             <p class="text-xs text-invite-cream opacity-70 tracking-widest mt-2 uppercase">Registre o nosso dia</p>
         </div>
     </header>
 
-    <!-- Área Principal -->
     <main class="flex-1 overflow-y-auto no-scrollbar relative">
         
         <!-- ABA: ENVIAR FOTO -->
         <section id="tab-enviar" class="tab-content active p-6">
             <div class="bg-white rounded-2xl shadow-sm border border-invite-gold/20 p-6 relative overflow-hidden">
-                <!-- Watermark ícones -->
                 <i class="fas fa-user-tie absolute top-4 left-4 text-invite-green opacity-5 text-4xl"></i>
                 <i class="fas fa-person-dress absolute top-4 right-4 text-invite-green opacity-5 text-4xl"></i>
 
@@ -174,24 +167,58 @@
             </div>
         </section>
 
-        <!-- ABA: MURAL -->
-        <section id="tab-mural" class="tab-content p-6">
-            <div class="mb-8 text-center">
-                <div class="separator-line mb-3">Galeria</div>
-                <h2 class="text-2xl font-semibold text-invite-green tracking-wide">MURAL AO VIVO</h2>
+        <!-- ABA: LOGIN ADMINISTRATIVO -->
+        <section id="tab-login" class="tab-content p-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-invite-gold/20 p-8 relative overflow-hidden mt-4">
+                <div class="text-center mb-8">
+                    <i class="fas fa-lock text-3xl text-invite-gold mb-4 opacity-80"></i>
+                    <h2 class="text-2xl font-semibold text-invite-green tracking-wide mb-2">ÁREA RESTRITA</h2>
+                    <p class="text-xs text-invite-gold uppercase tracking-widest">Acesso exclusivo dos noivos</p>
+                </div>
+
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <input type="text" id="adminUser" required class="w-full bg-transparent border-b border-invite-gold/50 px-2 py-3 focus:outline-none focus:border-invite-green text-center text-lg placeholder-invite-gold/50 transition-colors" placeholder="Usuário">
+                    </div>
+                    <div>
+                        <input type="password" id="adminPass" required class="w-full bg-transparent border-b border-invite-gold/50 px-2 py-3 focus:outline-none focus:border-invite-green text-center text-lg placeholder-invite-gold/50 transition-colors" placeholder="Senha">
+                    </div>
+
+                    <p id="loginError" class="text-red-700 text-xs text-center hidden uppercase tracking-widest font-semibold">Credenciais incorretas</p>
+
+                    <button type="submit" class="w-full bg-invite-green text-invite-cream uppercase tracking-widest text-sm font-medium py-4 hover:bg-[#46503e] active:scale-[0.98] transition-all border border-transparent">
+                        Acessar Mural
+                    </button>
+                </form>
             </div>
+        </section>
+
+        <!-- ABA: MURAL (SÓ APARECE APÓS LOGIN) -->
+        <section id="tab-mural" class="tab-content p-6 hidden">
+            <div class="mb-8 text-center relative">
+                <button onclick="logoutAdmin()" class="absolute right-0 top-0 text-invite-gold hover:text-red-800 text-sm">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+                <div class="separator-line mb-3">Galeria Privada</div>
+                <h2 class="text-2xl font-semibold text-invite-green tracking-wide">FOTOS RECEBIDAS</h2>
+            </div>
+            
+            <!-- Botão Baixar Tudo -->
+            <button class="w-full mb-6 border border-invite-green text-invite-green uppercase tracking-widest text-xs font-semibold py-3 hover:bg-invite-green hover:text-white transition-all flex items-center justify-center gap-2">
+                <i class="fas fa-download"></i> Baixar Todas as Fotos (.ZIP)
+            </button>
+
             <div class="columns-2 gap-3 space-y-3" id="photoGrid">
-                <!-- Exemplo de fotos para visualização -->
                 <div class="break-inside-avoid relative overflow-hidden shadow-sm border p-1 bg-white border-invite-gold/30">
                     <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&q=80" class="w-full h-auto">
                     <div class="absolute bottom-1 left-1 right-1 bg-invite-green/90 p-2 text-invite-cream text-center">
-                        <p class="text-[9px] uppercase tracking-widest">O brinde</p>
+                        <p class="text-[9px] uppercase tracking-widest">O brinde - Tia Maria</p>
                     </div>
                 </div>
                 <div class="break-inside-avoid relative overflow-hidden shadow-sm border p-1 bg-white border-invite-gold/30">
                     <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=400&q=80" class="w-full h-auto">
                     <div class="absolute bottom-1 left-1 right-1 bg-invite-green/90 p-2 text-invite-cream text-center">
-                        <p class="text-[9px] uppercase tracking-widest">Livre</p>
+                        <p class="text-[9px] uppercase tracking-widest">Livre - João</p>
                     </div>
                 </div>
             </div>
@@ -210,29 +237,81 @@
             <i class="fas fa-camera text-xl"></i>
         </button>
         
-        <button onclick="switchTab('tab-mural')" class="nav-btn flex flex-col items-center gap-1 text-invite-gold hover:text-invite-green w-16 transition-colors" data-target="tab-mural">
-            <i class="fas fa-images text-lg"></i>
-            <span class="text-[9px] uppercase tracking-widest font-semibold mt-1">Mural</span>
+        <!-- Botão modificado para Área Restrita -->
+        <button onclick="handleNoivosTab()" class="nav-btn flex flex-col items-center gap-1 text-invite-gold hover:text-invite-green w-16 transition-colors" data-target="tab-login">
+            <i class="fas fa-lock text-lg" id="lockIcon"></i>
+            <span class="text-[9px] uppercase tracking-widest font-semibold mt-1">Noivos</span>
         </button>
     </nav>
 
     <script>
+        // Sistema simples de controle de estado
+        let isUserLoggedIn = false;
+
         function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+                el.classList.add('hidden'); // Força esconder
+            });
+            
+            const activeTab = document.getElementById(tabId);
+            activeTab.classList.remove('hidden');
+            activeTab.classList.add('active');
             
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                if(btn.dataset.target) {
-                    btn.classList.remove('text-invite-green');
-                    btn.classList.add('text-invite-gold');
-                }
+                btn.classList.remove('text-invite-green');
+                btn.classList.add('text-invite-gold');
             });
-            const activeBtn = document.querySelector(`.nav-btn[data-target="${tabId}"]`);
-            if(activeBtn && tabId !== 'tab-enviar') {
+
+            // Arrumar seleção de cor no menu inferior
+            let targetNav = tabId;
+            if (tabId === 'tab-mural' || tabId === 'tab-login') {
+                targetNav = 'tab-login'; // O botão da direita cuida dos dois estados
+            }
+
+            const activeBtn = document.querySelector(`.nav-btn[data-target="${targetNav}"]`);
+            if(activeBtn && targetNav !== 'tab-enviar') {
                 activeBtn.classList.add('text-invite-green');
                 activeBtn.classList.remove('text-invite-gold');
             }
             window.scrollTo(0,0);
+        }
+
+        // Lógica de navegação do botão "Noivos"
+        function handleNoivosTab() {
+            if (isUserLoggedIn) {
+                switchTab('tab-mural');
+            } else {
+                switchTab('tab-login');
+            }
+        }
+
+        // Sistema de Login (Front-end)
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPass').value;
+            
+            if(user.toLowerCase() === 'noivos' && pass === '28112026') {
+                isUserLoggedIn = true;
+                document.getElementById('loginError').classList.add('hidden');
+                document.getElementById('lockIcon').classList.remove('fa-lock');
+                document.getElementById('lockIcon').classList.add('fa-unlock');
+                
+                // Limpa formulário e abre mural
+                document.getElementById('loginForm').reset();
+                switchTab('tab-mural');
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        });
+
+        // Logout
+        function logoutAdmin() {
+            isUserLoggedIn = false;
+            document.getElementById('lockIcon').classList.remove('fa-unlock');
+            document.getElementById('lockIcon').classList.add('fa-lock');
+            switchTab('tab-enviar');
         }
 
         const photoInput = document.getElementById('photoInput');
@@ -296,13 +375,15 @@
             btn.disabled = true;
             
             setTimeout(() => {
-                alert('Foto enviada com sucesso para o mural dos noivos!');
+                alert('Foto enviada com sucesso para o mural privado dos noivos!');
                 btn.innerHTML = originalText;
                 btn.disabled = false;
                 document.getElementById('uploadForm').reset();
                 imagePreview.classList.add('hidden');
                 dropZone.classList.remove('hidden');
-                switchTab('tab-mural');
+                
+                // Volta para a tela inicial para o convidado continuar interagindo
+                switchTab('tab-desafios');
             }, 1000);
         });
     </script>
