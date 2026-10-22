@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Álbum & Desafios - Nathalia e Gabriel</title>
     
-    <!-- Tailwind CSS -->
+    <!-- Bibliotecas: Tailwind, FontAwesome, Supabase, JSZip e FileSaver -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        invite: { 
-                            green: '#55604C', 
-                            cream: '#F6F4F0', 
-                            gold: '#9A947A',  
-                            text: '#4A4A4A'   
-                        }
+                        invite: { green: '#55604C', cream: '#F6F4F0', gold: '#9A947A', text: '#4A4A4A' }
                     },
                     fontFamily: {
                         script: ['"Great Vibes"', 'cursive'],
@@ -28,79 +28,35 @@
         }
     </script>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
     
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
-        body { background-color: #F6F4F0; color: #4A4A4A; }
-        
+        body { background-color: #F6F4F0; color: #4A4A4A; font-family: 'Cormorant Garamond', serif; }
         .tab-content { display: none; animation: fadeIn 0.4s ease-in-out; }
         .tab-content.active { display: block; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        .monogram {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.5rem;
-            line-height: 1;
-            color: #F6F4F0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            font-weight: 300;
-        }
-
-        .separator-line {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: #9A947A;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            font-size: 0.8rem;
-        }
-        .separator-line::before, .separator-line::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid rgba(154, 148, 122, 0.4);
-        }
+        .monogram { font-size: 2.5rem; line-height: 1; color: #F6F4F0; display: flex; justify-content: center; margin-bottom: 0.5rem; font-weight: 300; }
+        .separator-line { display: flex; align-items: center; text-align: center; color: #9A947A; text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.8rem; }
+        .separator-line::before, .separator-line::after { content: ''; flex: 1; border-bottom: 1px solid rgba(154, 148, 122, 0.4); }
         .separator-line::before { margin-right: .75em; }
         .separator-line::after { margin-left: .75em; }
-
-        .glass-nav {
-            background: rgba(246, 244, 240, 0.95);
-            backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(154, 148, 122, 0.3);
-        }
+        .glass-nav { background: rgba(246, 244, 240, 0.95); backdrop-filter: blur(12px); border-top: 1px solid rgba(154, 148, 122, 0.3); }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden pb-16 font-serif">
+<body class="h-screen flex flex-col overflow-hidden pb-16">
 
-    <!-- Header Fiel ao Convite -->
+    <!-- Header -->
     <header class="bg-invite-green text-invite-cream p-6 rounded-b-3xl relative z-10 shadow-md">
         <div class="text-center flex flex-col items-center">
             <div class="monogram tracking-widest">N<span class="ml-[-0.2em] mt-[0.3em]">G</span></div>
-            
             <div class="flex items-center justify-center gap-3 w-full max-w-[250px] mb-4">
                 <div class="h-px bg-invite-cream w-8 opacity-60"></div>
                 <p class="text-[0.7rem] uppercase tracking-[0.2em] text-invite-cream opacity-90">28 de Novembro de 2026</p>
                 <div class="h-px bg-invite-cream w-8 opacity-60"></div>
             </div>
-
             <h1 class="text-5xl font-script text-invite-cream mt-1 mb-2 font-normal">Nathalia e Gabriel</h1>
-            
             <p class="text-xs text-invite-cream opacity-70 tracking-widest mt-2 uppercase">Registre o nosso dia</p>
         </div>
     </header>
@@ -121,25 +77,23 @@
                 <form id="uploadForm" class="space-y-5">
                     <div>
                         <label class="block text-xs uppercase tracking-widest text-invite-gold mb-1">Seu Nome</label>
-                        <input type="text" required class="w-full bg-invite-cream/50 border border-invite-gold/30 rounded-none px-4 py-3 focus:outline-none focus:border-invite-green text-sm transition-colors" placeholder="Digite seu nome">
+                        <input type="text" id="guestName" required class="w-full bg-invite-cream/50 border border-invite-gold/30 rounded-none px-4 py-3 focus:outline-none focus:border-invite-green text-sm transition-colors" placeholder="Digite seu nome">
                     </div>
-
                     <div>
                         <label class="block text-xs uppercase tracking-widest text-invite-gold mb-1">Missão / Desafio</label>
                         <select id="challengeSelect" class="w-full bg-invite-cream/50 border border-invite-gold/30 rounded-none px-4 py-3 focus:outline-none focus:border-invite-green text-sm appearance-none transition-colors">
-                            <option value="livre">📸 Registro Livre da Festa</option>
-                            <option value="pai-noivo">👔 Com o pai do noivo</option>
-                            <option value="cerimonialista">📋 Com a cerimonialista</option>
-                            <option value="selfie-noivos">👰‍♂️ Selfie com os noivos</option>
-                            <option value="brinde">🥂 O brinde mais animado</option>
-                            <option value="emocao">😢 Alguém emocionado na cerimônia</option>
-                            <option value="dancinha">🕺 A melhor dancinha na pista</option>
-                            <option value="decoracao">✨ O detalhe favorito da decoração</option>
-                            <option value="doces">🍬 A mesa de doces</option>
-                            <option value="avos">👵 O avô ou avó mais estiloso(a)</option>
+                            <option value="Livre">📸 Registro Livre da Festa</option>
+                            <option value="Pai do Noivo">👔 Com o pai do noivo</option>
+                            <option value="Cerimonialista">📋 Com a cerimonialista</option>
+                            <option value="Selfie Noivos">👰‍♂️ Selfie com os noivos</option>
+                            <option value="Brinde">🥂 O brinde mais animado</option>
+                            <option value="Emocao">😢 Alguém emocionado</option>
+                            <option value="Dancinha">🕺 A melhor dancinha</option>
+                            <option value="Decoracao">✨ Detalhe da decoração</option>
+                            <option value="Doces">🍬 A mesa de doces</option>
+                            <option value="Avos">👵 O avô/avó mais estiloso(a)</option>
                         </select>
                     </div>
-
                     <div class="relative pt-2">
                         <input type="file" id="photoInput" accept="image/*" required class="hidden">
                         <label for="photoInput" id="dropZone" class="flex flex-col items-center justify-center w-full h-44 border border-invite-gold/50 bg-invite-cream/30 cursor-pointer hover:bg-invite-cream transition-colors">
@@ -148,8 +102,7 @@
                         </label>
                         <img id="imagePreview" class="hidden w-full h-52 object-cover border border-invite-green shadow-sm p-1 bg-white">
                     </div>
-
-                    <button type="submit" class="w-full bg-invite-green text-invite-cream uppercase tracking-widest text-sm font-medium py-4 hover:bg-[#46503e] active:scale-[0.98] transition-all mt-4 border border-transparent">
+                    <button type="submit" id="btnSubmitForm" class="w-full bg-invite-green text-invite-cream uppercase tracking-widest text-sm font-medium py-4 hover:bg-[#46503e] active:scale-[0.98] transition-all mt-4">
                         Enviar para os Noivos
                     </button>
                 </form>
@@ -162,9 +115,7 @@
                 <div class="separator-line mb-3">Interação</div>
                 <h2 class="text-2xl font-semibold text-invite-green tracking-wide">CAÇA AO TESOURO</h2>
             </div>
-            <div class="grid grid-cols-1 gap-3 pb-6" id="challengesList">
-                <!-- Preenchido via JS -->
-            </div>
+            <div class="grid grid-cols-1 gap-3 pb-6" id="challengesList"></div>
         </section>
 
         <!-- ABA: LOGIN ADMINISTRATIVO -->
@@ -175,25 +126,20 @@
                     <h2 class="text-2xl font-semibold text-invite-green tracking-wide mb-2">ÁREA RESTRITA</h2>
                     <p class="text-xs text-invite-gold uppercase tracking-widest">Acesso exclusivo dos noivos</p>
                 </div>
-
                 <form id="loginForm" class="space-y-6">
                     <div>
-                        <input type="text" id="adminUser" required class="w-full bg-transparent border-b border-invite-gold/50 px-2 py-3 focus:outline-none focus:border-invite-green text-center text-lg placeholder-invite-gold/50 transition-colors" placeholder="Usuário">
+                        <input type="text" id="adminUser" required class="w-full bg-transparent border-b border-invite-gold/50 px-2 py-3 focus:outline-none focus:border-invite-green text-center text-lg placeholder-invite-gold/50" placeholder="Usuário">
                     </div>
                     <div>
-                        <input type="password" id="adminPass" required class="w-full bg-transparent border-b border-invite-gold/50 px-2 py-3 focus:outline-none focus:border-invite-green text-center text-lg placeholder-invite-gold/50 transition-colors" placeholder="Senha">
+                        <input type="password" id="adminPass" required class="w-full bg-transparent border-b border-invite-gold/50 px-2 py-3 focus:outline-none focus:border-invite-green text-center text-lg placeholder-invite-gold/50" placeholder="Senha">
                     </div>
-
                     <p id="loginError" class="text-red-700 text-xs text-center hidden uppercase tracking-widest font-semibold">Credenciais incorretas</p>
-
-                    <button type="submit" class="w-full bg-invite-green text-invite-cream uppercase tracking-widest text-sm font-medium py-4 hover:bg-[#46503e] active:scale-[0.98] transition-all border border-transparent">
-                        Acessar Mural
-                    </button>
+                    <button type="submit" class="w-full bg-invite-green text-invite-cream uppercase tracking-widest text-sm font-medium py-4">Acessar Mural</button>
                 </form>
             </div>
         </section>
 
-        <!-- ABA: MURAL (SÓ APARECE APÓS LOGIN) -->
+        <!-- ABA: MURAL PRIVADO -->
         <section id="tab-mural" class="tab-content p-6 hidden">
             <div class="mb-8 text-center relative">
                 <button onclick="logoutAdmin()" class="absolute right-0 top-0 text-invite-gold hover:text-red-800 text-sm">
@@ -203,90 +149,123 @@
                 <h2 class="text-2xl font-semibold text-invite-green tracking-wide">FOTOS RECEBIDAS</h2>
             </div>
             
-            <!-- Botão Baixar Tudo -->
-            <button class="w-full mb-6 border border-invite-green text-invite-green uppercase tracking-widest text-xs font-semibold py-3 hover:bg-invite-green hover:text-white transition-all flex items-center justify-center gap-2">
+            <button id="btnDownloadZip" onclick="baixarTodasFotos()" class="w-full mb-6 border border-invite-green text-invite-green uppercase tracking-widest text-xs font-semibold py-3 hover:bg-invite-green hover:text-white transition-all flex items-center justify-center gap-2">
                 <i class="fas fa-download"></i> Baixar Todas as Fotos (.ZIP)
             </button>
 
             <div class="columns-2 gap-3 space-y-3" id="photoGrid">
-                <div class="break-inside-avoid relative overflow-hidden shadow-sm border p-1 bg-white border-invite-gold/30">
-                    <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&q=80" class="w-full h-auto">
-                    <div class="absolute bottom-1 left-1 right-1 bg-invite-green/90 p-2 text-invite-cream text-center">
-                        <p class="text-[9px] uppercase tracking-widest">O brinde - Tia Maria</p>
-                    </div>
-                </div>
-                <div class="break-inside-avoid relative overflow-hidden shadow-sm border p-1 bg-white border-invite-gold/30">
-                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=400&q=80" class="w-full h-auto">
-                    <div class="absolute bottom-1 left-1 right-1 bg-invite-green/90 p-2 text-invite-cream text-center">
-                        <p class="text-[9px] uppercase tracking-widest">Livre - João</p>
-                    </div>
-                </div>
+                <!-- Fotos carregadas do banco aparecerão aqui -->
             </div>
         </section>
-
     </main>
 
-    <!-- Bottom Navigation Fiel à Identidade -->
+    <!-- Bottom Navigation -->
     <nav class="glass-nav fixed bottom-0 w-full px-8 py-4 flex justify-between items-center z-50">
         <button onclick="switchTab('tab-desafios')" class="nav-btn flex flex-col items-center gap-1 text-invite-gold hover:text-invite-green w-16 transition-colors" data-target="tab-desafios">
-            <i class="fas fa-list text-lg"></i>
-            <span class="text-[9px] uppercase tracking-widest font-semibold mt-1">Missões</span>
+            <i class="fas fa-list text-lg"></i><span class="text-[9px] uppercase tracking-widest font-semibold mt-1">Missões</span>
         </button>
-        
         <button onclick="switchTab('tab-enviar')" class="nav-btn relative -top-5 bg-invite-green text-invite-cream w-16 h-16 rounded-full flex justify-center items-center shadow-lg shadow-invite-green/30 border-4 border-[#F6F4F0] transform transition-transform hover:scale-105" data-target="tab-enviar">
             <i class="fas fa-camera text-xl"></i>
         </button>
-        
-        <!-- Botão modificado para Área Restrita -->
         <button onclick="handleNoivosTab()" class="nav-btn flex flex-col items-center gap-1 text-invite-gold hover:text-invite-green w-16 transition-colors" data-target="tab-login">
-            <i class="fas fa-lock text-lg" id="lockIcon"></i>
-            <span class="text-[9px] uppercase tracking-widest font-semibold mt-1">Noivos</span>
+            <i class="fas fa-lock text-lg" id="lockIcon"></i><span class="text-[9px] uppercase tracking-widest font-semibold mt-1">Noivos</span>
         </button>
     </nav>
 
     <script>
-        // Sistema simples de controle de estado
+        // ==========================================
+        // 1. CONFIGURE SEU SUPABASE AQUI
+        // ==========================================
+        const SUPABASE_URL = 'SUA_URL_DO_SUPABASE_AQUI'; 
+        const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANONIMA_AQUI';
+        
+        const supabaseUrl = SUPABASE_URL;
+        const supabaseKey = SUPABASE_ANON_KEY;
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
         let isUserLoggedIn = false;
 
+        // Controle de Abas
         function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => {
-                el.classList.remove('active');
-                el.classList.add('hidden'); // Força esconder
-            });
-            
+            document.querySelectorAll('.tab-content').forEach(el => { el.classList.remove('active'); el.classList.add('hidden'); });
             const activeTab = document.getElementById(tabId);
-            activeTab.classList.remove('hidden');
-            activeTab.classList.add('active');
+            activeTab.classList.remove('hidden'); activeTab.classList.add('active');
             
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('text-invite-green');
-                btn.classList.add('text-invite-gold');
-            });
-
-            // Arrumar seleção de cor no menu inferior
-            let targetNav = tabId;
-            if (tabId === 'tab-mural' || tabId === 'tab-login') {
-                targetNav = 'tab-login'; // O botão da direita cuida dos dois estados
-            }
-
+            document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.remove('text-invite-green'); btn.classList.add('text-invite-gold'); });
+            let targetNav = (tabId === 'tab-mural' || tabId === 'tab-login') ? 'tab-login' : tabId;
             const activeBtn = document.querySelector(`.nav-btn[data-target="${targetNav}"]`);
-            if(activeBtn && targetNav !== 'tab-enviar') {
-                activeBtn.classList.add('text-invite-green');
-                activeBtn.classList.remove('text-invite-gold');
-            }
+            if(activeBtn && targetNav !== 'tab-enviar') { activeBtn.classList.add('text-invite-green'); activeBtn.classList.remove('text-invite-gold'); }
             window.scrollTo(0,0);
         }
 
-        // Lógica de navegação do botão "Noivos"
         function handleNoivosTab() {
-            if (isUserLoggedIn) {
-                switchTab('tab-mural');
-            } else {
-                switchTab('tab-login');
-            }
+            if (isUserLoggedIn) { carregarMural(); switchTab('tab-mural'); } 
+            else { switchTab('tab-login'); }
         }
 
-        // Sistema de Login (Front-end)
+        // Preview da Foto
+        const photoInput = document.getElementById('photoInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const dropZone = document.getElementById('dropZone');
+        let currentFile = null;
+
+        photoInput.addEventListener('change', function(e) {
+            currentFile = e.target.files[0];
+            if (currentFile) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    imagePreview.src = event.target.result;
+                    imagePreview.classList.remove('hidden');
+                    dropZone.classList.add('hidden');
+                }
+                reader.readAsDataURL(currentFile);
+            }
+        });
+
+        // Envio para o Banco de Dados
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if(!currentFile) return alert('Por favor, selecione uma foto.');
+            if(SUPABASE_URL === 'SUA_URL_DO_SUPABASE_AQUI') return alert('Configure as chaves do banco de dados primeiro!');
+
+            const btn = document.getElementById('btnSubmitForm');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            btn.disabled = true;
+
+            const nome = document.getElementById('guestName').value;
+            const desafio = document.getElementById('challengeSelect').value;
+            const fileName = `${Date.now()}_${currentFile.name.replace(/\s+/g, '_')}`;
+
+            try {
+                // 1. Upload da Imagem pro Storage
+                const { data: uploadData, error: uploadError } = await _supabase.storage.from('fotos').upload(fileName, currentFile);
+                if (uploadError) throw uploadError;
+
+                // 2. Pegar URL Pública
+                const { data: urlData } = _supabase.storage.from('fotos').getPublicUrl(fileName);
+                
+                // 3. Salvar na Tabela
+                const { error: dbError } = await _supabase.from('mural').insert([{ nome: nome, desafio: desafio, url: urlData.publicUrl }]);
+                if (dbError) throw dbError;
+
+                alert('Foto enviada com sucesso para os noivos!');
+                document.getElementById('uploadForm').reset();
+                imagePreview.classList.add('hidden');
+                dropZone.classList.remove('hidden');
+                currentFile = null;
+                switchTab('tab-desafios');
+
+            } catch (error) {
+                console.error(error);
+                alert('Erro ao enviar foto. Verifique a conexão.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // Login do Administrador
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const user = document.getElementById('adminUser').value;
@@ -297,16 +276,14 @@
                 document.getElementById('loginError').classList.add('hidden');
                 document.getElementById('lockIcon').classList.remove('fa-lock');
                 document.getElementById('lockIcon').classList.add('fa-unlock');
-                
-                // Limpa formulário e abre mural
                 document.getElementById('loginForm').reset();
+                carregarMural();
                 switchTab('tab-mural');
             } else {
                 document.getElementById('loginError').classList.remove('hidden');
             }
         });
 
-        // Logout
         function logoutAdmin() {
             isUserLoggedIn = false;
             document.getElementById('lockIcon').classList.remove('fa-unlock');
@@ -314,32 +291,79 @@
             switchTab('tab-enviar');
         }
 
-        const photoInput = document.getElementById('photoInput');
-        const imagePreview = document.getElementById('imagePreview');
-        const dropZone = document.getElementById('dropZone');
+        // Carregar Mural do Banco
+        async function carregarMural() {
+            const grid = document.getElementById('photoGrid');
+            grid.innerHTML = '<p class="text-center text-xs col-span-2 text-invite-gold">Carregando fotos...</p>';
+            
+            if(SUPABASE_URL === 'SUA_URL_DO_SUPABASE_AQUI') return grid.innerHTML = '<p class="text-center text-xs col-span-2 text-red-500">Banco não configurado.</p>';
 
-        photoInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    imagePreview.src = event.target.result;
-                    imagePreview.classList.remove('hidden');
-                    dropZone.classList.add('hidden');
-                }
-                reader.readAsDataURL(file);
+            const { data, error } = await _supabase.from('mural').select('*').order('created_at', { ascending: false });
+            
+            if (error) {
+                grid.innerHTML = '<p class="text-center text-xs col-span-2 text-red-500">Erro ao carregar.</p>';
+                return;
             }
-        });
 
+            if (data.length === 0) {
+                grid.innerHTML = '<p class="text-center text-xs col-span-2 text-invite-gold">Nenhuma foto recebida ainda.</p>';
+                return;
+            }
+
+            grid.innerHTML = '';
+            data.forEach(item => {
+                grid.innerHTML += `
+                    <div class="break-inside-avoid relative overflow-hidden shadow-sm border p-1 bg-white border-invite-gold/30 mb-3">
+                        <img src="${item.url}" class="w-full h-auto">
+                        <div class="absolute bottom-1 left-1 right-1 bg-invite-green/90 p-2 text-invite-cream text-center">
+                            <p class="text-[9px] uppercase tracking-widest">${item.desafio} - ${item.nome}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Baixar em Lote (.ZIP)
+        async function baixarTodasFotos() {
+            const btn = document.getElementById('btnDownloadZip');
+            const originalText = btn.innerHTML;
+            
+            const { data, error } = await _supabase.from('mural').select('*');
+            if (error || !data || data.length === 0) return alert('Nenhuma foto para baixar.');
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Compactando ZIP...';
+            btn.disabled = true;
+
+            const zip = new JSZip();
+            
+            for (let i = 0; i < data.length; i++) {
+                try {
+                    const response = await fetch(data[i].url);
+                    const blob = await response.blob();
+                    const ext = data[i].url.split('.').pop().split('?')[0] || 'jpg';
+                    const nomeSeguro = data[i].nome.replace(/[^a-zA-Z0-9]/g, '');
+                    const desafioSeguro = data[i].desafio.replace(/[^a-zA-Z0-9]/g, '');
+                    zip.file(`Foto_${i+1}_${desafioSeguro}_${nomeSeguro}.${ext}`, blob);
+                } catch (e) { console.error('Erro ao baixar uma imagem', e); }
+            }
+
+            zip.generateAsync({type:"blob"}).then(function(content) {
+                saveAs(content, "Fotos_Casamento_Nathalia_e_Gabriel.zip");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+        }
+
+        // Renderizar Desafios
         const desafios = [
-            { id: 'pai-noivo', icon: 'fa-user-tie', title: 'O Pai do Noivo', desc: 'Encontre-o e garanta esse registro clássico.' },
-            { id: 'cerimonialista', icon: 'fa-clipboard-list', title: 'A Cerimonialista', desc: 'Ela está correndo para tudo ser perfeito!' },
-            { id: 'selfie-noivos', icon: 'fa-heart', title: 'Com os Noivos', desc: 'O registro mais aguardado da noite.' },
-            { id: 'brinde', icon: 'fa-champagne-glasses', title: 'Um Brinde', desc: 'Pegue sua taça e junte sua mesa.' },
-            { id: 'emocao', icon: 'fa-face-grin-tears', title: 'Emoção Pura', desc: 'Aquela lágrima de alegria na cerimônia.' },
-            { id: 'dancinha', icon: 'fa-music', title: 'Rei da Pista', desc: 'O passinho mais animado da festa.' },
-            { id: 'decoracao', icon: 'fa-leaf', title: 'A Decoração', desc: 'Aquele detalhe que chamou sua atenção.' },
-            { id: 'doces', icon: 'fa-cake-candles', title: 'Mesa de Doces', desc: 'O paraíso antes de ser atacado.' }
+            { id: 'Pai do Noivo', icon: 'fa-user-tie', title: 'O Pai do Noivo', desc: 'Encontre-o e garanta esse registro.' },
+            { id: 'Cerimonialista', icon: 'fa-clipboard-list', title: 'A Cerimonialista', desc: 'Ela está correndo para tudo ser perfeito!' },
+            { id: 'Selfie Noivos', icon: 'fa-heart', title: 'Com os Noivos', desc: 'O registro mais aguardado da noite.' },
+            { id: 'Brinde', icon: 'fa-champagne-glasses', title: 'Um Brinde', desc: 'Pegue sua taça e junte sua mesa.' },
+            { id: 'Emocao', icon: 'fa-face-grin-tears', title: 'Emoção Pura', desc: 'Aquela lágrima de alegria na cerimônia.' },
+            { id: 'Dancinha', icon: 'fa-music', title: 'Rei da Pista', desc: 'O passinho mais animado da festa.' },
+            { id: 'Decoracao', icon: 'fa-leaf', title: 'A Decoração', desc: 'Aquele detalhe que chamou sua atenção.' },
+            { id: 'Doces', icon: 'fa-cake-candles', title: 'Mesa de Doces', desc: 'O paraíso antes de ser atacado.' }
         ];
 
         const challengesList = document.getElementById('challengesList');
@@ -347,45 +371,15 @@
             challengesList.innerHTML += `
                 <div class="bg-white p-4 border border-invite-gold/30 flex items-center justify-between hover:border-invite-green transition-colors cursor-pointer" onclick="cumprirDesafio('${d.id}')">
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-invite-cream flex items-center justify-center text-invite-green border border-invite-gold/20">
-                            <i class="fas ${d.icon} text-lg"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold text-invite-text uppercase tracking-widest text-xs">${d.title}</h3>
-                            <p class="text-[11px] text-invite-gold italic mt-0.5">${d.desc}</p>
-                        </div>
+                        <div class="w-10 h-10 bg-invite-cream flex items-center justify-center text-invite-green border border-invite-gold/20"><i class="fas ${d.icon} text-lg"></i></div>
+                        <div><h3 class="font-semibold text-invite-text uppercase tracking-widest text-xs">${d.title}</h3><p class="text-[11px] text-invite-gold italic mt-0.5">${d.desc}</p></div>
                     </div>
-                    <button class="text-invite-gold hover:text-invite-green p-2 transition-colors">
-                        <i class="fas fa-camera"></i>
-                    </button>
+                    <button class="text-invite-gold hover:text-invite-green p-2 transition-colors"><i class="fas fa-camera"></i></button>
                 </div>
             `;
         });
 
-        window.cumprirDesafio = function(id) {
-            document.getElementById('challengeSelect').value = id;
-            switchTab('tab-enviar');
-        }
-
-        document.getElementById('uploadForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-            btn.disabled = true;
-            
-            setTimeout(() => {
-                alert('Foto enviada com sucesso para o mural privado dos noivos!');
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                document.getElementById('uploadForm').reset();
-                imagePreview.classList.add('hidden');
-                dropZone.classList.remove('hidden');
-                
-                // Volta para a tela inicial para o convidado continuar interagindo
-                switchTab('tab-desafios');
-            }, 1000);
-        });
+        window.cumprirDesafio = function(id) { document.getElementById('challengeSelect').value = id; switchTab('tab-enviar'); }
     </script>
 </body>
 </html>
